@@ -16,6 +16,7 @@ export default function App() {
     const [selectedUserIds, setSelectedUserIds] = useState<number[]>([])
     const [isLoadingResults, setLoadingResults] = useState(false)
     const [searchResult, setSearchResult] = useState<GitHubSearchUsersResponse | null>(null)
+    // The delayed value is here to prevent to trigger to many requests. The request starts after the user stopped writing 500ms
     const delayedSearch = useDebouncedValue(search, 500)
 
     useEffect(() => {
@@ -28,6 +29,10 @@ export default function App() {
         }
     }, [delayedSearch]);
 
+    /**
+     * Manage the checkbox states.
+     * After each changement of the selected users in the list, we recalculate the state of the global checkbox
+     */
     useEffect(() => {
         if (!checkAllCheckbox.current) {
             return
@@ -43,6 +48,10 @@ export default function App() {
         checkAllCheckbox.current.indeterminate = selectedUserIds.length > 0 && selectedUserIds.length !== searchResult.items.length
     }, [selectedUserIds]);
 
+    /**
+     * Call the Github API to get the search results.
+     * Manage loading, error and success data in React states.
+     */
     const searchUsers = async (search: string) => {
         try {
             setLoadingResults(true)
@@ -61,6 +70,9 @@ export default function App() {
         }
     }
 
+    /**
+     * Add/Remove user in the selected user list.
+     */
     const onToggleUser = (user: CardUserType, isNowSelected: boolean) => {
         if (isNowSelected) {
             setSelectedUserIds(previousSelectedUserIds => [...previousSelectedUserIds, user.id])
@@ -69,6 +81,9 @@ export default function App() {
         }
     }
 
+    /**
+     * Select/unselect all the users directly from the global checkbox.
+     */
     const onToggleAllUsers = (e: ChangeEvent<HTMLInputElement>) => {
         if (!searchResult?.items) {
             return null
@@ -83,6 +98,10 @@ export default function App() {
         }
     }
 
+    /**
+     * Remove the selected users of the list.
+     * @note: even if we don't use the `total_count` we change it in an optimistic update
+     */
     const removeSelection = () => {
         setSearchResult(previousSearchResults => {
             if (!previousSearchResults) {
@@ -98,6 +117,11 @@ export default function App() {
         setSelectedUserIds([])
     }
 
+    /**
+     * Duplicate selected items of the list
+     * @note: we change `login` (to see a difference in the card between the original and the duplicated) and `id` (because
+     *  we use it as `key` when rendering the user list and we need a different key from the original. The `id` is also used for the selection).
+     */
     const duplicateSelection = () => {
         setSearchResult(previousSearchResults => {
 
@@ -124,6 +148,9 @@ export default function App() {
         setSelectedUserIds([])
     }
 
+    /**
+     * Show the correct result state depending on the loading, error, success state of the API call
+     */
     const renderResults = () => {
         if (!search.length) {
             return (

@@ -1,69 +1,16 @@
-# React + TypeScript + Vite
+# Tests Fulll
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Informations
+Pour le style de l'app j'ai utilisé les [Module CSS](https://vite.dev/guide/features.html#css-modules) supportés par Vite. 
+Afin de réduire au maximum le nombre de librairies utilisées dans l'application j'utilise la [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) pour les appels HTTP.
 
-Currently, two official plugins are available:
+## Axes d'améliorations
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Gestion des requêtes
+Pour améliorer la qualité de code, j'aurais tendance à utiliser `@tanstack/react-query` pour la gestion des appels API : ça m'aurais évité
+de devoir déclarer des `useState` pour mes états "erreur", "loading", etc ... De plus "react-query" m'aurait offert la possibilité d'avoir
+du cache géré de manière efficace et simple directement côté navigateur.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Gestion du style
+Pour réduire la quantité de code pour le style, j'aurais tendance à utiliser SCSS, [Tailwind](https://tailwindcss.com/), mais également [Shadcn/ui](https://ui.shadcn.com/) pour générer les composants 
+de base du design system.
