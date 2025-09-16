@@ -10,7 +10,8 @@ import Spinner from "./components/ui/Spinner.tsx";
 
 export default function App() {
     const checkAllCheckbox = useRef<HTMLInputElement>(null)
-    const [search, setSearch] = useState('panda')
+    const [search, setSearch] = useState('')
+    const [searchError, setSearchError] = useState('')
     const [selectedUserIds, setSelectedUserIds] = useState<number[]>([])
     const [isLoadingResults, setLoadingResults] = useState(false)
     const [searchResult, setSearchResult] = useState<GitHubSearchUsersResponse | null>(null)
@@ -44,10 +45,16 @@ export default function App() {
     const searchUsers = async (search: string) => {
         try {
             setLoadingResults(true)
+            setSearchError('')
             const searchResult = await GithubApi.searchProfiles(search)
             setSearchResult(searchResult)
         } catch (e) {
             console.error(e)
+            if ((e as Response).status === 403) {
+                setSearchError("Rate limit exceeded: You're triggering to many requests. Please try again in a few seconds.")
+            } else {
+                setSearchError('An error occurred: Please try again in a few seconds.')
+            }
         } finally {
             setLoadingResults(false)
         }
@@ -132,6 +139,16 @@ export default function App() {
                 </div>
             )
         }
+
+        if (searchError) {
+            return (
+                <div className={styles.centerContent}>
+                    <p>{searchError}</p>
+                    <button onClick={() => searchUsers(delayedSearch)}>Retry</button>
+                </div>
+            )
+        }
+
         if (searchResult?.items.length === 0) {
             return (
                 <div className={styles.centerContent}>
