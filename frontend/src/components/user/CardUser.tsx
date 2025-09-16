@@ -1,6 +1,5 @@
 import styles from './CardUser.module.css'
 import type {GitHubUser} from "../../types/response/github-api/SearchProfilesResponse.type.ts";
-// import {useEffect, useState} from "react";
 
 export type User = Pick<GitHubUser, 'id' | 'login' | 'avatar_url' | 'html_url'>
 
@@ -12,12 +11,6 @@ type Props = {
 }
 
 export default function CardUser(props: Props) {
-    // const [isSelected, setSelected] = useState(props.isSelected ?? false)
-
-    // useEffect(() => {
-    //     props.onToggleSelect?.(props.user, isSelected)
-    // }, [isSelected]);
-
     return (
         <div className={styles.card}>
             <div className={styles.card__body}>
