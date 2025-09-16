@@ -5,12 +5,14 @@ import CardUser, { type User as CardUserType } from "./components/user/CardUser.
 import {type ChangeEvent, useEffect, useRef, useState} from "react";
 import useDebouncedValue from "./hooks/useDebouncedValue.ts";
 import GithubApi from "./services/api/Github.api.ts";
-import type { GitHubSearchUsersResponse } from "./types/response/github-api/SearchProfilesResponse.type.ts";
+import type {GitHubSearchUsersResponse, GitHubUser} from "./types/response/github-api/SearchProfilesResponse.type.ts";
+import Spinner from "./components/ui/Spinner.tsx";
 
-function App() {
+export default function App() {
     const checkAllCheckbox = useRef<HTMLInputElement>(null)
     const [search, setSearch] = useState('panda')
     const [selectedUserIds, setSelectedUserIds] = useState<number[]>([])
+    const [isLoadingResults, setLoadingResults] = useState(false)
     const [searchResult, setSearchResult] = useState<GitHubSearchUsersResponse | null>(null)
     const delayedSearch = useDebouncedValue(search, 500)
 
@@ -41,10 +43,13 @@ function App() {
 
     const searchUsers = async (search: string) => {
         try {
+            setLoadingResults(true)
             const searchResult = await GithubApi.searchProfiles(search)
             setSearchResult(searchResult)
         } catch (e) {
             console.error(e)
+        } finally {
+            setLoadingResults(false)
         }
     }
 
@@ -68,7 +73,84 @@ function App() {
         } else {
             setSelectedUserIds([])
         }
+    }
 
+    const removeSelection = () => {
+        setSearchResult(previousSearchResults => {
+            if (!previousSearchResults) {
+                return previousSearchResults
+            }
+
+            return {
+                ...previousSearchResults,
+                total_count: previousSearchResults.total_count - selectedUserIds.length,
+                items: previousSearchResults.items.filter(item => !selectedUserIds.includes(item.id))
+            }
+        })
+        setSelectedUserIds([])
+    }
+
+    const duplicateSelection = () => {
+        setSearchResult(previousSearchResults => {
+
+            if (!previousSearchResults) {
+                return previousSearchResults
+            }
+
+            const itemsToDuplicate: GitHubUser[] = previousSearchResults.items
+                .filter(item => selectedUserIds.includes(item.id))
+                .map(item => {
+                    return {
+                        ...item,
+                        id: item.id + Math.random(),
+                        login: item.login + ' (bis)',
+                    }
+                })
+
+            return {
+                ...previousSearchResults,
+                total_count: previousSearchResults.total_count + itemsToDuplicate.length,
+                items: [...previousSearchResults.items, ...itemsToDuplicate]
+            }
+        })
+        setSelectedUserIds([])
+    }
+
+    const renderResults = () => {
+        if (!search.length) {
+            return (
+                <div className={styles.centerContent}>
+                    <p>Search a Github user by typing something in the search bar.</p>
+                </div>
+            )
+        }
+
+        if (isLoadingResults) {
+            return (
+                <div className={styles.centerContent}>
+                    <Spinner/>
+                </div>
+            )
+        }
+        if (searchResult?.items.length === 0) {
+            return (
+                <div className={styles.centerContent}>
+                    <p>No result for "{delayedSearch}". Please type something else.</p>
+                </div>
+            )
+        }
+
+        return (
+            <div className={styles.userGrid}>
+                {
+                    searchResult?.items.length
+                        ? searchResult?.items.map(user =>
+                            <CardUser user={user} isSelectable isSelected={selectedUserIds.includes(user.id)} onToggleSelect={onToggleUser} key={user.id}/>
+                        )
+                        : null
+                }
+            </div>
+        )
     }
 
     return (
@@ -86,7 +168,6 @@ function App() {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
-
                 </div>
 
                 <div className={styles.actions}>
@@ -96,26 +177,16 @@ function App() {
                     </div>
 
                     <div className={styles.actions__buttons}>
-                        <button className={styles.actions__button} type={'button'}>
+                        <button className={styles.actions__button} type={'button'} onClick={() => duplicateSelection()}>
                             <IconDuplicate size={24} color={'#333'} />
                         </button>
-                        <button className={styles.actions__button} type={'button'}>
+                        <button className={styles.actions__button} type={'button'} onClick={() => removeSelection()}>
                             <IconTrash size={24} color={'#333'} />
                         </button>
                     </div>
                 </div>
-                <div className={styles.userGrid}>
-                    {
-                        searchResult?.items.length
-                            ? searchResult?.items.map(user =>
-                                <CardUser user={user} isSelectable isSelected={selectedUserIds.includes(user.id)} onToggleSelect={onToggleUser}/>
-                            )
-                            : null
-                    }
-                </div>
+                {renderResults()}
             </main>
         </div>
     )
 }
-
-export default App

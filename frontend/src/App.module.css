@@ -34,6 +34,12 @@
     padding: 64px 0;
 }
 
+.centerContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .search {
     padding: 8px;
     width: 50%;
