@@ -5,6 +5,7 @@
 }
 
 .card__body {
+    position: relative;
     padding: 16px;
     display: flex;
     flex-direction: column;
@@ -41,4 +42,10 @@
     border-radius: 4px;
     padding: 4px;
     cursor: pointer;
+}
+
+.card__checkbox {
+    position: absolute;
+    top: 4px;
+    left: 4px;
 }
