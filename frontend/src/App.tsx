@@ -10,6 +10,7 @@ import Spinner from "./components/ui/Spinner.tsx";
 
 export default function App() {
     const checkAllCheckbox = useRef<HTMLInputElement>(null)
+    const [isEditModeActivated, activateEditMode] = useState(false)
     const [search, setSearch] = useState('')
     const [searchError, setSearchError] = useState('')
     const [selectedUserIds, setSelectedUserIds] = useState<number[]>([])
@@ -162,7 +163,7 @@ export default function App() {
                 {
                     searchResult?.items.length
                         ? searchResult?.items.map(user =>
-                            <CardUser user={user} isSelectable isSelected={selectedUserIds.includes(user.id)} onToggleSelect={onToggleUser} key={user.id}/>
+                            <CardUser user={user} isSelectable={isEditModeActivated} isSelected={selectedUserIds.includes(user.id)} onToggleSelect={onToggleUser} key={user.id}/>
                         )
                         : null
                 }
@@ -185,23 +186,30 @@ export default function App() {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
+                    <label>
+                        <input type="checkbox" checked={isEditModeActivated} onChange={e => activateEditMode(e.target.checked)}/> Edit mode ?
+                    </label>
                 </div>
 
-                <div className={styles.actions}>
-                    <div>
-                        <input type="checkbox" ref={checkAllCheckbox} onChange={onToggleAllUsers}/>
-                        <label>{selectedUserIds.length} elements selected</label>
-                    </div>
+                {
+                    isEditModeActivated && (
+                        <div className={styles.actions}>
+                            <div>
+                                <input type="checkbox" ref={checkAllCheckbox} onChange={onToggleAllUsers}/>
+                                <label>{selectedUserIds.length} elements selected</label>
+                            </div>
 
-                    <div className={styles.actions__buttons}>
-                        <button className={styles.actions__button} type={'button'} onClick={() => duplicateSelection()}>
-                            <IconDuplicate size={24} color={'#333'} />
-                        </button>
-                        <button className={styles.actions__button} type={'button'} onClick={() => removeSelection()}>
-                            <IconTrash size={24} color={'#333'} />
-                        </button>
-                    </div>
-                </div>
+                            <div className={styles.actions__buttons}>
+                                <button className={styles.actions__button} type={'button'} onClick={() => duplicateSelection()}>
+                                    <IconDuplicate size={24} color={'#333'} />
+                                </button>
+                                <button className={styles.actions__button} type={'button'} onClick={() => removeSelection()}>
+                                    <IconTrash size={24} color={'#333'} />
+                                </button>
+                            </div>
+                        </div>
+                    )
+                }
                 {renderResults()}
             </main>
         </div>
