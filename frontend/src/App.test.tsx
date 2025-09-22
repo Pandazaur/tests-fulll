@@ -2,8 +2,8 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
 import App from './App'
-import GithubApi from './services/api/Github.api'
 import type { Props as CardUserProps } from './components/user/CardUser.tsx'
+import GithubApi from './services/api/Github.api'
 
 // Mock the API
 vi.mock('./services/api/Github.api')

@@ -1,12 +1,12 @@
+import { type ChangeEvent, useEffect, useRef, useState } from 'react'
 import styles from './App.module.css'
 import IconDuplicate from './components/ui/icons/IconDuplicate.tsx'
 import IconTrash from './components/ui/icons/IconTrash.tsx'
+import Spinner from './components/ui/Spinner.tsx'
 import CardUser, { type User as CardUserType } from './components/user/CardUser.tsx'
-import { type ChangeEvent, useEffect, useRef, useState } from 'react'
 import useDebouncedValue from './hooks/useDebouncedValue.ts'
 import GithubApi from './services/api/Github.api.ts'
 import type { GitHubSearchUsersResponse, GitHubUser } from './types/response/github-api/SearchProfilesResponse.type.ts'
-import Spinner from './components/ui/Spinner.tsx'
 
 export default function App() {
     const checkAllCheckbox = useRef<HTMLInputElement>(null)
@@ -19,6 +19,7 @@ export default function App() {
     // The delayed value is here to prevent to trigger to many requests. The request starts after the user stopped writing 500ms
     const delayedSearch = useDebouncedValue(search, 500)
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: "searchUsers" is a local static function
     useEffect(() => {
         setSelectedUserIds([])
 
@@ -46,7 +47,7 @@ export default function App() {
 
         checkAllCheckbox.current.checked = selectedUserIds.length > 0 && selectedUserIds.length === searchResult.items.length
         checkAllCheckbox.current.indeterminate = selectedUserIds.length > 0 && selectedUserIds.length !== searchResult.items.length
-    }, [selectedUserIds])
+    }, [selectedUserIds, searchResult])
 
     /**
      * Call the Github API to get the search results.
@@ -169,7 +170,9 @@ export default function App() {
             return (
                 <div className={styles.centerContent}>
                     <p>{searchError}</p>
-                    <button onClick={() => searchUsers(delayedSearch)}>Retry</button>
+                    <button type={'button'} onClick={() => searchUsers(delayedSearch)}>
+                        Retry
+                    </button>
                 </div>
             )
         }
