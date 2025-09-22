@@ -1,22 +1,29 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Helvetica, Arial, sans-serif;
+html,
+body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: Helvetica, Arial, sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6, p {
-  margin: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	margin: 0;
 }
 
 :root {
-  /* Colors */
-  --color-header: #f1f4f4;
-  --color-input-border: #3c3c3c;
+	/* Colors */
+	--color-header: #f1f4f4;
+	--color-input-border: #3c3c3c;
 
-  /* Font sizes */
-  --text-xs: 0.825em;
-  --text-sm: 0.925em;
-  --text-base: 1em;
-  --text-xl: 1.75em;
+	/* Font sizes */
+	--text-xs: 0.825em;
+	--text-sm: 0.925em;
+	--text-base: 1em;
+	--text-xl: 1.75em;
 }

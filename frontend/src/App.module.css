@@ -1,98 +1,98 @@
 .root {
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+	height: 100vh;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
 }
 
 .header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 64px;
-    background-color: var(--color-header);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 64px;
+	background-color: var(--color-header);
 }
 
 .header__title {
-    font-size: var(--text-xl);
+	font-size: var(--text-xl);
 }
 
 .main {
-    width: 100%;
-    max-width: 980px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    flex: 1;
+	width: 100%;
+	max-width: 980px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	flex: 1;
 }
 
 .searchWrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: center;
-    justify-content: center;
-    padding: 64px 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	align-items: center;
+	justify-content: center;
+	padding: 64px 0;
 }
 
 .centerContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
 }
 
 .search {
-    padding: 8px;
-    width: 50%;
-    border: 1px solid var(--color-input-border);
-    border-radius: 4px;
+	padding: 8px;
+	width: 50%;
+	border: 1px solid var(--color-input-border);
+	border-radius: 4px;
 }
 
 .editMode {
-    background: var(--color-header);
-    padding: 8px;
-    border-radius: 99px;
-    font-size: var(--text-xs);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+	background: var(--color-header);
+	padding: 8px;
+	border-radius: 99px;
+	font-size: var(--text-xs);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
 }
 
 .actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-    width: 100%;
-    margin-bottom: 64px;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 32px;
+	width: 100%;
+	margin-bottom: 64px;
 }
 
 .actions__buttons {
-    display: flex;
-    gap: 16px;
+	display: flex;
+	gap: 16px;
 }
 
 .actions__button {
-    border: none;
-    background: none;
-    display: inline-flex;
-    transition: all .3s ease-in-out;
+	border: none;
+	background: none;
+	display: inline-flex;
+	transition: all 0.3s ease-in-out;
 }
 
 .actions__button:hover {
-    background-color: #EEE;
+	background-color: #eee;
 }
 
 .userGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 100px);
-    justify-content: center;
-    gap: 32px;
-    overflow: scroll;
-    padding: 16px 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, 100px);
+	justify-content: center;
+	gap: 32px;
+	overflow: scroll;
+	padding: 16px 0;
 }

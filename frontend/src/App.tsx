@@ -1,12 +1,12 @@
 import styles from './App.module.css'
-import IconDuplicate from "./components/ui/icons/IconDuplicate.tsx";
-import IconTrash from "./components/ui/icons/IconTrash.tsx";
-import CardUser, { type User as CardUserType } from "./components/user/CardUser.tsx";
-import {type ChangeEvent, useEffect, useRef, useState} from "react";
-import useDebouncedValue from "./hooks/useDebouncedValue.ts";
-import GithubApi from "./services/api/Github.api.ts";
-import type {GitHubSearchUsersResponse, GitHubUser} from "./types/response/github-api/SearchProfilesResponse.type.ts";
-import Spinner from "./components/ui/Spinner.tsx";
+import IconDuplicate from './components/ui/icons/IconDuplicate.tsx'
+import IconTrash from './components/ui/icons/IconTrash.tsx'
+import CardUser, { type User as CardUserType } from './components/user/CardUser.tsx'
+import { type ChangeEvent, useEffect, useRef, useState } from 'react'
+import useDebouncedValue from './hooks/useDebouncedValue.ts'
+import GithubApi from './services/api/Github.api.ts'
+import type { GitHubSearchUsersResponse, GitHubUser } from './types/response/github-api/SearchProfilesResponse.type.ts'
+import Spinner from './components/ui/Spinner.tsx'
 
 export default function App() {
     const checkAllCheckbox = useRef<HTMLInputElement>(null)
@@ -27,7 +27,7 @@ export default function App() {
         } else {
             setSearchResult(null)
         }
-    }, [delayedSearch]);
+    }, [delayedSearch])
 
     /**
      * Manage the checkbox states.
@@ -46,7 +46,7 @@ export default function App() {
 
         checkAllCheckbox.current.checked = selectedUserIds.length > 0 && selectedUserIds.length === searchResult.items.length
         checkAllCheckbox.current.indeterminate = selectedUserIds.length > 0 && selectedUserIds.length !== searchResult.items.length
-    }, [selectedUserIds]);
+    }, [selectedUserIds])
 
     /**
      * Call the Github API to get the search results.
@@ -75,9 +75,9 @@ export default function App() {
      */
     const onToggleUser = (user: CardUserType, isNowSelected: boolean) => {
         if (isNowSelected) {
-            setSelectedUserIds(previousSelectedUserIds => [...previousSelectedUserIds, user.id])
+            setSelectedUserIds((previousSelectedUserIds) => [...previousSelectedUserIds, user.id])
         } else {
-            setSelectedUserIds(previousSelectedUserIds => previousSelectedUserIds.filter(id => id !== user.id))
+            setSelectedUserIds((previousSelectedUserIds) => previousSelectedUserIds.filter((id) => id !== user.id))
         }
     }
 
@@ -90,9 +90,7 @@ export default function App() {
         }
 
         if (e.target.checked) {
-            setSelectedUserIds(
-                searchResult.items.map(user => user.id)
-            )
+            setSelectedUserIds(searchResult.items.map((user) => user.id))
         } else {
             setSelectedUserIds([])
         }
@@ -103,7 +101,7 @@ export default function App() {
      * @note: even if we don't use the `total_count` we change it in an optimistic update
      */
     const removeSelection = () => {
-        setSearchResult(previousSearchResults => {
+        setSearchResult((previousSearchResults) => {
             if (!previousSearchResults) {
                 return previousSearchResults
             }
@@ -111,7 +109,7 @@ export default function App() {
             return {
                 ...previousSearchResults,
                 total_count: previousSearchResults.total_count - selectedUserIds.length,
-                items: previousSearchResults.items.filter(item => !selectedUserIds.includes(item.id))
+                items: previousSearchResults.items.filter((item) => !selectedUserIds.includes(item.id)),
             }
         })
         setSelectedUserIds([])
@@ -123,15 +121,14 @@ export default function App() {
      *  we use it as `key` when rendering the user list and we need a different key from the original. The `id` is also used for the selection).
      */
     const duplicateSelection = () => {
-        setSearchResult(previousSearchResults => {
-
+        setSearchResult((previousSearchResults) => {
             if (!previousSearchResults) {
                 return previousSearchResults
             }
 
             const itemsToDuplicate: GitHubUser[] = previousSearchResults.items
-                .filter(item => selectedUserIds.includes(item.id))
-                .map(item => {
+                .filter((item) => selectedUserIds.includes(item.id))
+                .map((item) => {
                     return {
                         ...item,
                         id: item.id + Math.random(),
@@ -142,7 +139,7 @@ export default function App() {
             return {
                 ...previousSearchResults,
                 total_count: previousSearchResults.total_count + itemsToDuplicate.length,
-                items: [...previousSearchResults.items, ...itemsToDuplicate]
+                items: [...previousSearchResults.items, ...itemsToDuplicate],
             }
         })
         setSelectedUserIds([])
@@ -163,7 +160,7 @@ export default function App() {
         if (isLoadingResults) {
             return (
                 <div className={styles.centerContent}>
-                    <Spinner/>
+                    <Spinner />
                 </div>
             )
         }
@@ -187,13 +184,11 @@ export default function App() {
 
         return (
             <div className={styles.userGrid}>
-                {
-                    searchResult?.items.length
-                        ? searchResult?.items.map(user =>
-                            <CardUser user={user} isSelectable={isEditModeActivated} isSelected={selectedUserIds.includes(user.id)} onToggleSelect={onToggleUser} key={user.id}/>
-                        )
-                        : null
-                }
+                {searchResult?.items.length
+                    ? searchResult?.items.map((user) => (
+                          <CardUser user={user} isSelectable={isEditModeActivated} isSelected={selectedUserIds.includes(user.id)} onToggleSelect={onToggleUser} key={user.id} />
+                      ))
+                    : null}
             </div>
         )
     }
@@ -205,38 +200,29 @@ export default function App() {
             </header>
             <main className={styles.main}>
                 <div className={styles.searchWrapper}>
-                    <input
-                        className={styles.search}
-                        placeholder={"Search user"}
-                        type="text"
-                        name={'search'}
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
+                    <input className={styles.search} placeholder={'Search user'} type="text" name={'search'} value={search} onChange={(e) => setSearch(e.target.value)} />
                     <label className={styles.editMode}>
-                        <input type="checkbox" checked={isEditModeActivated} onChange={e => activateEditMode(e.target.checked)}/> Edit mode ?
+                        <input type="checkbox" checked={isEditModeActivated} onChange={(e) => activateEditMode(e.target.checked)} /> Edit mode ?
                     </label>
                 </div>
 
-                {
-                    isEditModeActivated && (
-                        <div className={styles.actions}>
-                            <div>
-                                <input type="checkbox" ref={checkAllCheckbox} onChange={onToggleAllUsers}/>
-                                <label>{selectedUserIds.length} elements selected</label>
-                            </div>
-
-                            <div className={styles.actions__buttons}>
-                                <button className={styles.actions__button} type={'button'} onClick={() => duplicateSelection()}>
-                                    <IconDuplicate size={24} color={'#333'} />
-                                </button>
-                                <button className={styles.actions__button} type={'button'} onClick={() => removeSelection()}>
-                                    <IconTrash size={24} color={'#333'} />
-                                </button>
-                            </div>
+                {isEditModeActivated && (
+                    <div className={styles.actions}>
+                        <div>
+                            <input type="checkbox" ref={checkAllCheckbox} onChange={onToggleAllUsers} />
+                            <label>{selectedUserIds.length} elements selected</label>
                         </div>
-                    )
-                }
+
+                        <div className={styles.actions__buttons}>
+                            <button className={styles.actions__button} type={'button'} onClick={() => duplicateSelection()}>
+                                <IconDuplicate size={24} color={'#333'} />
+                            </button>
+                            <button className={styles.actions__button} type={'button'} onClick={() => removeSelection()}>
+                                <IconTrash size={24} color={'#333'} />
+                            </button>
+                        </div>
+                    </div>
+                )}
                 {renderResults()}
             </main>
         </div>

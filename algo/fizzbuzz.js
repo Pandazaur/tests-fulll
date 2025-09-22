@@ -16,7 +16,7 @@ export function fizzBuzz(number) {
 
 /**
  * Version alternative fonctionnelle également.
- * Je préfère celle au-dessus, mais celle-ci est également testable dans fizzbuzz.test.js
+ * Je préfère celle au-dessus pour sa lisibilité et immuabilité, mais celle-ci est également testable dans fizzbuzz.test.js
  */
 export function fizzBuzz_alt(number) {
     let text = ''
