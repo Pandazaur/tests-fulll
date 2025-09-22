@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
 import App from './App'
 import GithubApi from './services/api/Github.api'
+import type {Props as CardUserProps} from "./components/user/CardUser.tsx"
 
 // Mock the API
 vi.mock('./services/api/Github.api')
@@ -26,7 +27,7 @@ vi.mock('./App.module.css', () => ({
 
 // Mock CardUser component
 vi.mock('./components/user/CardUser', () => ({
-  default: ({ user, isSelectable, isSelected, onToggleSelect }: any) => (
+  default: ({ user, isSelectable, isSelected, onToggleSelect }: CardUserProps) => (
     <div data-testid={`card-user-${user.id}`}>
       {isSelectable && (
         <input

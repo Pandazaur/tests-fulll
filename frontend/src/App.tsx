@@ -213,7 +213,7 @@ export default function App() {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
-                    <label>
+                    <label className={styles.editMode}>
                         <input type="checkbox" checked={isEditModeActivated} onChange={e => activateEditMode(e.target.checked)}/> Edit mode ?
                     </label>
                 </div>

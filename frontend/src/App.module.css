@@ -47,6 +47,19 @@
 .search {
     padding: 8px;
     width: 50%;
+    border: 1px solid var(--color-input-border);
+    border-radius: 4px;
+}
+
+.editMode {
+    background: var(--color-header);
+    padding: 8px;
+    border-radius: 99px;
+    font-size: var(--text-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .actions {

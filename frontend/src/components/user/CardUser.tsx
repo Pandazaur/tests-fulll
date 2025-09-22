@@ -3,7 +3,7 @@ import type {GitHubUser} from "../../types/response/github-api/SearchProfilesRes
 
 export type User = Pick<GitHubUser, 'id' | 'login' | 'avatar_url' | 'html_url'>
 
-type Props = {
+export type Props = {
     user: User
     isSelectable?: boolean
     isSelected?: boolean
