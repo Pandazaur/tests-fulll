@@ -1,8 +1,23 @@
 # Tests Fulll
 
+
 ## Informations
 Pour le style de l'app j'ai utilisé les [Module CSS](https://vite.dev/guide/features.html#css-modules) supportés par Vite. 
 Afin de réduire au maximum le nombre de librairies utilisées dans l'application j'utilise la [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) pour les appels HTTP.
+
+## Lancement de l'app
+```shell
+npm install
+npm run dev
+```
+
+## Lancement des tests
+```shell
+npm install
+npm run test
+```
+
+---
 
 ## Axes d'améliorations
 
